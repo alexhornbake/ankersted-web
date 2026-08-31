@@ -10,5 +10,9 @@
 	"observability": {
 		"enabled": true
 	},
-	"upload_source_maps": true
+	"upload_source_maps": true,
+	"routes": [
+		{ "pattern": "ankersted.dk", "custom_domain": true },
+		{ "pattern": "www.ankersted.dk", "custom_domain": true }
+	]
 }
