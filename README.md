@@ -17,6 +17,9 @@ Features:
 - ✅ RSS Feed support
 - ✅ Markdown & MDX support
 - ✅ Built-in Observability logging
+- ✅ **Keystatic CMS**: Content management with GitHub integration
+- ✅ **Admin UI**: Edit content locally or from production site
+- ✅ **Git Integration**: All changes auto-commit to GitHub
 
 <!-- dash-content-end -->
 
@@ -29,6 +32,32 @@ npm create cloudflare@latest -- --template=cloudflare/templates/astro-blog-start
 ```
 
 A live public deployment of this template is available at [https://astro-blog-starter-template.templates.workers.dev](https://astro-blog-starter-template.templates.workers.dev)
+
+## 📝 Content Management with Keystatic
+
+This project includes **Keystatic**, a powerful CMS that lets you manage blog content with a user-friendly admin interface.
+
+### Local Development
+
+Start the dev server and access the admin UI:
+
+```bash
+npm run dev
+# Visit http://127.0.0.1:4321/keystatic
+```
+
+Create, edit, and delete blog posts through the visual interface. All changes are saved as `.mdoc` files in `src/content/blog/`.
+
+### Production Editing
+
+Connect your GitHub account to enable editing from your deployed site:
+
+1. Create a GitHub OAuth app (5 minutes)
+2. Set environment variables on Cloudflare Workers
+3. Visit `/keystatic` on your production domain
+4. All changes auto-commit to GitHub
+
+**For detailed setup instructions, see [KEYSTATIC.md](./KEYSTATIC.md)**
 
 ## 🚀 Project Structure
 
