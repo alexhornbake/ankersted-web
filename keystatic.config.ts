@@ -10,9 +10,12 @@ import { config, fields, collection } from "@keystatic/core";
  * Keystatic automatically detects the mode based on environment variables.
  */
 
-// Safely access environment variables - works in both server and browser contexts
+// Safely access environment variables - works in server, browser, and Cloudflare Worker contexts
 const getEnv = (key: string): string | undefined => {
-	if (typeof process !== "undefined" && process.env) {
+	if (typeof import.meta !== "undefined" && import.meta.env && import.meta.env[key]) {
+		return import.meta.env[key];
+	}
+	if (typeof process !== "undefined" && process.env && process.env[key]) {
 		return process.env[key];
 	}
 	return undefined;
