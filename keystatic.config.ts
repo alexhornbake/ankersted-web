@@ -79,13 +79,11 @@ const baseConfig: Parameters<typeof config>[0] = {
 	},
 };
 
-// Add GitHub config only if we have the credentials
-if (clientId && clientSecret) {
-	(baseConfig as any).github = {
-		clientId,
-		clientSecret,
-		secret,
-	};
-}
+// Include GitHub config so Keystatic handles GitHub OAuth on Cloudflare Workers
+(baseConfig as any).github = {
+	clientId,
+	clientSecret,
+	secret,
+};
 
 export default config(baseConfig);
