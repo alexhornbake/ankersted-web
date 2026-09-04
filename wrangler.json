@@ -1,18 +1,30 @@
 {
 	"name": "ankersted-web",
 	"compatibility_date": "2025-10-08",
-	"compatibility_flags": ["nodejs_compat"],
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
 	"main": "./dist/_worker.js/index.js",
 	"assets": {
 		"directory": "./dist",
 		"binding": "ASSETS"
 	},
 	"observability": {
-		"enabled": true
+		"enabled": true,
+		"invocation_logs": true
 	},
 	"upload_source_maps": true,
 	"routes": [
-		{ "pattern": "ankersted.dk", "custom_domain": true },
-		{ "pattern": "www.ankersted.dk", "custom_domain": true }
-	]
+		{
+			"pattern": "ankersted.dk",
+			"custom_domain": true
+		},
+		{
+			"pattern": "www.ankersted.dk",
+			"custom_domain": true
+		}
+	],
+	"vars": {
+		"KEYSTATIC_GITHUB_CLIENT_ID": "Iv23likSZkW8EIuldyIb"
+	}
 }
