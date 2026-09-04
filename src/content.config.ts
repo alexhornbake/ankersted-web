@@ -35,4 +35,12 @@ const pages = defineCollection({
 	}),
 });
 
-export const collections = { blog, pages };
+const footer = defineCollection({
+	loader: glob({
+		base: "./src/content/footer",
+		pattern: "**/*.mdoc",
+	}),
+	schema: z.object({}),
+});
+
+export const collections = { blog, pages, footer };

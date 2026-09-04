@@ -1,4 +1,4 @@
-import { config, fields, collection } from "@keystatic/core";
+import { config, fields, collection, singleton } from "@keystatic/core";
 
 /**
  * Keystatic Configuration
@@ -74,6 +74,17 @@ const baseConfig: Parameters<typeof config>[0] = {
 				content: fields.markdoc({
 					label: "Content",
 				}),
+			},
+		}),
+	},
+
+	singletons: {
+		footer: singleton({
+			label: "Footer",
+			path: "src/content/footer/",
+			format: { contentField: "content" },
+			schema: {
+				content: fields.markdoc({ label: "Content" }),
 			},
 		}),
 	},
