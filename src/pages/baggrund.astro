@@ -2,9 +2,9 @@
 import Layout from '../layouts/BlogPost.astro';
 import { getEntry, render } from 'astro:content';
 
-const page = await getEntry('pages', 'about');
+const page = await getEntry('pages', 'baggrund');
 if (!page) {
-	throw new Error('Could not find page "about" in content collection "pages"');
+	throw new Error('Could not find page "baggrund" in content collection "pages"');
 }
 const { Content } = await render(page);
 ---

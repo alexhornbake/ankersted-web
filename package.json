@@ -25,7 +25,9 @@
 		"astro": "5.16.9",
 		"react": "^19.2.8",
 		"react-dom": "^19.2.8",
-		"typescript": "5.9.3"
+		"typescript": "5.9.3",
+		"accessible-astro-components": "^5.7.1",
+		"astro-icon": "^1.1.5"
 	},
 	"devDependencies": {
 		"wrangler": "4.88.0"
