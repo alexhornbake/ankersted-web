@@ -1,24 +1,120 @@
 ---
-import { getEntry, render } from 'astro:content';
-import { defaultLocale, getLangFromPath, type Locale } from '../i18n/ui';
+import { SITE_TITLE } from '../consts';
+import {
+	contact,
+	defaultLocale,
+	getLangFromPath,
+	t,
+	type Locale,
+} from '../i18n/ui';
 
 interface Props {
 	lang?: Locale;
 }
 
 const lang = Astro.props.lang ?? getLangFromPath(Astro.url.pathname) ?? defaultLocale;
-const footerEntry = await getEntry('footer', lang);
-const { Content } = footerEntry ? await render(footerEntry) : { Content: null };
+const dpLogoSrc = '/footer/DP-LOGO-vector.png';
 ---
 
 <footer>
-	{Content && <Content />}
+	<div class="footer-inner">
+		<div class="col brand-col">
+			<p class="brand-name">{SITE_TITLE}</p>
+			<p class="brand-tag">{t(lang, 'footerBrandTag')}</p>
+		</div>
+
+		<div class="col contact-col">
+			<p class="col-heading">{t(lang, 'footerContactHeading')}</p>
+			<p>{contact.addressLine}</p>
+			<p>{contact.cityLine}</p>
+			<p>{contact.phone}</p>
+			<p>{contact.email}</p>
+		</div>
+
+		<div class="col trust-col">
+			<p class="psych-name">{contact.psychologistName}</p>
+			<p>{t(lang, 'footerCredentialAuthorised')}</p>
+			<p>
+				<a href="https://www.dp.dk/" rel="noopener noreferrer">{t(lang, 'footerCredentialMember')}</a>
+			</p>
+			<img class="dp-logo" src={dpLogoSrc} alt={t(lang, 'dpLogoAlt')} width="120" height="48" />
+		</div>
+	</div>
 </footer>
 <style>
 	footer {
-		padding: 2em 1em 6em 1em;
-		background: linear-gradient(var(--gray-gradient)) no-repeat;
-		color: rgb(var(--gray));
-		text-align: center;
+		padding: 2.75rem 1.25rem 3.5rem;
+		background: color-mix(in srgb, var(--olive-soft) 55%, var(--ground));
+		color: var(--quiet);
+		border-top: 1px solid var(--line);
+		flex-shrink: 0;
+		margin-top: auto;
+	}
+
+	.footer-inner {
+		max-width: 64rem;
+		margin: 0 auto;
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 2rem 2.5rem;
+		font-size: 0.95rem;
+		line-height: 1.55;
+		text-align: left;
+	}
+
+	.col p {
+		margin: 0 0 0.35rem;
+	}
+
+	.col-heading {
+		font-family: var(--font-display);
+		font-optical-sizing: auto;
+		font-weight: 600;
+		font-size: 0.85rem;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--ink);
+		margin-bottom: 0.65rem !important;
+	}
+
+	.brand-name {
+		font-family: var(--font-display);
+		font-optical-sizing: auto;
+		font-weight: 700;
+		font-size: 1.25rem;
+		color: var(--ink);
+		letter-spacing: -0.02em;
+		margin-bottom: 0.25rem !important;
+	}
+
+	.brand-tag {
+		color: var(--quiet);
+	}
+
+	.psych-name {
+		font-family: var(--font-display);
+		font-optical-sizing: auto;
+		font-weight: 600;
+		color: var(--ink);
+		margin-bottom: 0.5rem !important;
+	}
+
+	.trust-col a {
+		color: var(--olive-dark);
+	}
+
+	.dp-logo {
+		display: block;
+		max-height: 2.75rem;
+		width: auto;
+		margin-top: 0.85rem;
+		opacity: 0.9;
+	}
+
+	@media (max-width: 720px) {
+		.footer-inner {
+			grid-template-columns: 1fr;
+			gap: 1.75rem;
+		}
 	}
 </style>

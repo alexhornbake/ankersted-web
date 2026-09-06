@@ -1,0 +1,64 @@
+---
+import BaseHead from './BaseHead.astro';
+import Header from './Header.astro';
+import Footer from './Footer.astro';
+import HomePage from './HomePage.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { getEntry, render } from 'astro:content';
+import type { Locale } from '../i18n/ui';
+
+interface Props {
+	lang: Locale;
+}
+
+const { lang } = Astro.props;
+const page = await getEntry('pages', lang);
+if (!page) {
+	throw new Error(`Could not find page "${lang}" in content collection "pages"`);
+}
+const { Content } = await render(page);
+
+const ledeDa =
+	'Terapi kan ikke fjerne livets bølger, men den kan hjælpe dig med at finde ro og vælge retning midt i dem.';
+const ledeEn =
+	"Therapy cannot remove life's waves, but it can help you find calm and choose a direction amid them.";
+---
+
+<!doctype html>
+<html lang={lang}>
+	<head>
+		<BaseHead
+			title={page.data.title || SITE_TITLE}
+			description={page.data.description || SITE_DESCRIPTION}
+			image={page.data.heroImage}
+			lang={lang}
+		/>
+	</head>
+	<body class="home-body">
+		<Header lang={lang} transparent={true} />
+		<main class="home-main">
+			<HomePage
+				lang={lang}
+				headline={page.data.description || SITE_DESCRIPTION}
+				heroImage={page.data.heroImage}
+			>
+				<span slot="lede">{lang === 'da' ? ledeDa : ledeEn}</span>
+				<Content />
+			</HomePage>
+		</main>
+		<Footer lang={lang} />
+	</body>
+</html>
+
+<style is:global>
+	body.home-body {
+		background: var(--ground);
+	}
+
+	main.home-main {
+		width: 100%;
+		max-width: none;
+		margin: 0;
+		padding: 0;
+	}
+</style>

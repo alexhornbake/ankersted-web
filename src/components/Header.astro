@@ -12,93 +12,381 @@ import {
 
 interface Props {
 	lang?: Locale;
+	transparent?: boolean;
+	/** Soft top wash behind nav (inner pages) — keeps ink-colored chrome */
+	atmosphere?: boolean;
 }
 
 const lang = Astro.props.lang ?? getLangFromPath(Astro.url.pathname) ?? defaultLocale;
+const transparent = Astro.props.transparent ?? false;
+const atmosphere = Astro.props.atmosphere ?? false;
 const homeHref = getRelativeLocaleUrl(lang, '');
 const baggrundHref = getRelativeLocaleUrl(lang, 'baggrund');
 const praktiskHref = getRelativeLocaleUrl(lang, 'praktisk-information');
+const menuId = 'site-nav-panel';
 ---
 
-<header>
-	<nav>
-		<h2><a href={homeHref}>{SITE_TITLE}</a></h2>
-		<div class="internal-links">
+<header class:list={[{ transparent, atmosphere }]} data-site-header>
+	<nav class="nav-bar" aria-label={SITE_TITLE}>
+		<a class="brand" href={homeHref}>{SITE_TITLE}</a>
+
+		<div class="internal-links desktop-nav">
 			<HeaderLink href={homeHref}>{t(lang, 'navHome')}</HeaderLink>
 			<HeaderLink href={baggrundHref}>{t(lang, 'navBackground')}</HeaderLink>
 			<HeaderLink href={praktiskHref}>{t(lang, 'navPractical')}</HeaderLink>
 		</div>
-		<div class="lang-switch" aria-label={t(lang, 'langSwitchLabel')}>
-			<a
-				href={swapLocalePath(Astro.url.pathname, 'da')}
-				aria-current={lang === 'da' ? 'page' : undefined}
-				class:list={[{ active: lang === 'da' }]}>DA</a
+
+		<div class="nav-end">
+			<div class="lang-switch" aria-label={t(lang, 'langSwitchLabel')}>
+				<a
+					href={swapLocalePath(Astro.url.pathname, 'da')}
+					aria-current={lang === 'da' ? 'page' : undefined}
+					class:list={[{ active: lang === 'da' }]}>DA</a
+				>
+				<span aria-hidden="true">|</span>
+				<a
+					href={swapLocalePath(Astro.url.pathname, 'en')}
+					aria-current={lang === 'en' ? 'page' : undefined}
+					class:list={[{ active: lang === 'en' }]}>EN</a
+				>
+			</div>
+
+			<button
+				type="button"
+				class="menu-toggle"
+				aria-controls={menuId}
+				aria-expanded="false"
+				aria-label={t(lang, 'menuOpen')}
+				data-menu-open-label={t(lang, 'menuOpen')}
+				data-menu-close-label={t(lang, 'menuClose')}
 			>
-			<span aria-hidden="true">|</span>
-			<a
-				href={swapLocalePath(Astro.url.pathname, 'en')}
-				aria-current={lang === 'en' ? 'page' : undefined}
-				class:list={[{ active: lang === 'en' }]}>EN</a
-			>
+				<span class="menu-icon" aria-hidden="true">
+					<span></span>
+					<span></span>
+					<span></span>
+				</span>
+			</button>
 		</div>
 	</nav>
+
+	<div class="mobile-panel" id={menuId} hidden>
+		<div class="mobile-links">
+			<HeaderLink href={homeHref}>{t(lang, 'navHome')}</HeaderLink>
+			<HeaderLink href={baggrundHref}>{t(lang, 'navBackground')}</HeaderLink>
+			<HeaderLink href={praktiskHref}>{t(lang, 'navPractical')}</HeaderLink>
+		</div>
+	</div>
 </header>
+
+<script>
+	function initSiteHeader(header: HTMLElement) {
+		const toggle = header.querySelector<HTMLButtonElement>('.menu-toggle');
+		const panel = header.querySelector<HTMLElement>('.mobile-panel');
+		if (!toggle || !panel) return;
+
+		const openLabel = toggle.dataset.menuOpenLabel ?? 'Open menu';
+		const closeLabel = toggle.dataset.menuCloseLabel ?? 'Close menu';
+
+		const setOpen = (open: boolean) => {
+			toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+			toggle.setAttribute('aria-label', open ? closeLabel : openLabel);
+			header.classList.toggle('menu-open', open);
+			panel.hidden = !open;
+			if (open) {
+				const first = panel.querySelector<HTMLAnchorElement>('a');
+				first?.focus();
+			}
+		};
+
+		toggle.addEventListener('click', () => {
+			const open = toggle.getAttribute('aria-expanded') !== 'true';
+			setOpen(open);
+		});
+
+		header.addEventListener('keydown', (event) => {
+			if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+				setOpen(false);
+				toggle.focus();
+			}
+		});
+
+		const mq = window.matchMedia('(min-width: 721px)');
+		const onMq = () => {
+			if (mq.matches) setOpen(false);
+		};
+		mq.addEventListener('change', onMq);
+	}
+
+	document.querySelectorAll<HTMLElement>('[data-site-header]').forEach(initSiteHeader);
+	document.addEventListener('astro:page-load', () => {
+		document.querySelectorAll<HTMLElement>('[data-site-header]').forEach(initSiteHeader);
+	});
+</script>
+
 <style>
 	header {
 		margin: 0;
-		padding: 0 1em;
-		background: white;
-		box-shadow: 0 2px 8px rgba(var(--black), 5%);
-	}
-	h2 {
-		margin: 0;
-		font-size: 1em;
+		padding: 0;
+		background: color-mix(in srgb, var(--surface) 92%, transparent);
+		backdrop-filter: blur(8px);
+		border-bottom: 1px solid var(--line);
+		position: sticky;
+		top: 0;
+		z-index: 20;
 	}
 
-	h2 a,
-	h2 a.active {
-		text-decoration: none;
+	header.transparent {
+		position: absolute;
+		left: 0;
+		right: 0;
+		background: transparent;
+		backdrop-filter: none;
+		border-bottom: 1px solid transparent;
 	}
-	nav {
+
+	header.atmosphere {
+		background: transparent;
+		backdrop-filter: none;
+		border-bottom: 1px solid transparent;
+	}
+
+	header.atmosphere.menu-open {
+		background: color-mix(in srgb, var(--olive-soft) 88%, var(--surface));
+		border-bottom-color: var(--line);
+	}
+
+	header.transparent.menu-open {
+		background: color-mix(in srgb, var(--ink) 72%, transparent);
+		backdrop-filter: blur(10px);
+		border-bottom-color: color-mix(in srgb, var(--surface) 18%, transparent);
+	}
+
+	.nav-bar {
+		display: grid;
+		grid-template-columns: 1fr auto 1fr;
+		align-items: center;
+		gap: 1rem;
+		max-width: 68rem;
+		margin: 0 auto;
+		padding: 0 1.25rem;
+		min-height: 3.75rem;
+	}
+
+	.brand {
+		font-family: var(--font-display);
+		font-optical-sizing: auto;
+		font-size: 1.15rem;
+		font-weight: 700;
+		letter-spacing: -0.02em;
+		text-decoration: none;
+		color: var(--ink);
+		padding: 0.85rem 0.25rem 0.85rem 0;
+		flex-shrink: 0;
+		justify-self: start;
+	}
+
+	header.transparent .brand,
+	header.transparent .nav-bar :global(a),
+	header.transparent .menu-toggle {
+		color: var(--surface);
+	}
+
+	.desktop-nav {
+		display: flex;
+		flex-wrap: nowrap;
+		gap: 0.15rem;
+		justify-self: center;
+	}
+
+	.nav-end {
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
-		gap: 1em;
-		flex-wrap: wrap;
+		gap: 0.65rem;
+		flex-shrink: 0;
+		justify-self: end;
 	}
-	.internal-links {
-		display: flex;
-		flex-wrap: wrap;
-	}
-	nav a {
-		padding: 1em 0.5em;
-		color: var(--black);
-		border-bottom: 4px solid transparent;
+
+	.nav-bar :global(a) {
+		padding: 0.85rem 0.55rem;
+		color: var(--ink);
+		border-bottom: 2px solid transparent;
 		text-decoration: none;
+		font-size: 0.95rem;
+		transition:
+			border-color 0.25s ease,
+			opacity 0.25s ease,
+			color 0.25s ease;
 	}
-	nav a.active {
+
+	.nav-bar :global(a.active) {
 		text-decoration: none;
-		border-bottom-color: var(--accent);
+		border-bottom-color: var(--olive);
 	}
+
+	header.transparent .nav-bar :global(a.active) {
+		border-bottom-color: color-mix(in srgb, var(--surface) 85%, transparent);
+	}
+
 	.lang-switch {
 		display: flex;
 		align-items: center;
 		gap: 0.35em;
-		font-size: 0.9em;
+		font-size: 0.85rem;
+		color: var(--quiet);
 	}
+
+	header.transparent .lang-switch {
+		color: color-mix(in srgb, var(--surface) 70%, transparent);
+	}
+
 	.lang-switch a {
-		padding: 0.5em 0.25em;
-		border-bottom: none;
+		padding: 0.5em 0.25em !important;
+		border-bottom: none !important;
 		opacity: 0.55;
 	}
+
 	.lang-switch a.active {
 		opacity: 1;
 		font-weight: 700;
+		border-bottom: none !important;
+	}
+
+	.menu-toggle {
+		display: none;
+		align-items: center;
+		justify-content: center;
+		width: 2.5rem;
+		height: 2.5rem;
+		padding: 0;
+		border: 1px solid color-mix(in srgb, currentColor 28%, transparent);
+		border-radius: 4px;
+		background: transparent;
+		color: var(--ink);
+		cursor: pointer;
+	}
+
+	.menu-toggle:focus-visible {
+		outline: 2px solid var(--olive);
+		outline-offset: 2px;
+	}
+
+	header.transparent .menu-toggle:focus-visible {
+		outline-color: var(--surface);
+	}
+
+	.menu-icon {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 5px;
+		width: 1.1rem;
+	}
+
+	.menu-icon span {
+		display: block;
+		height: 1.5px;
+		width: 100%;
+		background: currentColor;
+		border-radius: 1px;
+		transition:
+			transform 0.25s ease,
+			opacity 0.25s ease;
+	}
+
+	header.menu-open .menu-icon span:nth-child(1) {
+		transform: translateY(6.5px) rotate(45deg);
+	}
+
+	header.menu-open .menu-icon span:nth-child(2) {
+		opacity: 0;
+	}
+
+	header.menu-open .menu-icon span:nth-child(3) {
+		transform: translateY(-6.5px) rotate(-45deg);
+	}
+
+	.mobile-panel {
+		border-top: 1px solid var(--line);
+		background: var(--surface);
+		padding: 0.5rem 1.25rem 1rem;
+	}
+
+	header.transparent .mobile-panel {
+		background: transparent;
+		border-top-color: color-mix(in srgb, var(--surface) 18%, transparent);
+	}
+
+	header.atmosphere .mobile-panel {
+		background: color-mix(in srgb, var(--olive-soft) 70%, var(--surface));
+		border-top-color: var(--line);
+	}
+
+	.mobile-links {
+		display: flex;
+		flex-direction: column;
+		max-width: 68rem;
+		margin: 0 auto;
+	}
+
+	.mobile-links :global(a) {
+		display: block;
+		padding: 0.9rem 0.15rem;
+		color: var(--ink);
+		text-decoration: none;
+		font-family: var(--font-display);
+		font-optical-sizing: auto;
+		font-size: 1.15rem;
+		font-weight: 600;
+		border-bottom: 1px solid var(--line);
+	}
+
+	.mobile-links :global(a:last-child) {
 		border-bottom: none;
 	}
+
+	.mobile-links :global(a.active) {
+		color: var(--olive-dark);
+	}
+
+	header.transparent .mobile-links :global(a) {
+		color: var(--surface);
+		border-bottom-color: color-mix(in srgb, var(--surface) 16%, transparent);
+	}
+
+	header.transparent .mobile-links :global(a.active) {
+		color: var(--surface);
+		opacity: 1;
+	}
+
 	@media (max-width: 720px) {
-		.lang-switch {
+		.nav-bar {
+			display: flex;
+			justify-content: space-between;
+		}
+
+		.desktop-nav {
+			display: none;
+		}
+
+		.nav-end {
 			margin-left: auto;
+		}
+
+		.menu-toggle {
+			display: inline-flex;
+		}
+	}
+
+	@media (min-width: 721px) {
+		.mobile-panel {
+			display: none !important;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.menu-icon span,
+		.nav-bar :global(a) {
+			transition: none;
 		}
 	}
 </style>

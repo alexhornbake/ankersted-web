@@ -2,4 +2,4 @@
 // You can import this data from anywhere in your site by using the `import` keyword.
 
 export const SITE_TITLE = "Ankersted";
-export const SITE_DESCRIPTION = "Ankersted psykolog praksis i Aalborg.";
+export const SITE_DESCRIPTION = "Ankersted psykologpraksis.";

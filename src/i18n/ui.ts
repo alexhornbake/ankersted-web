@@ -8,6 +8,15 @@ export function isLocale(value: string | undefined): value is Locale {
 	return value === "da" || value === "en";
 }
 
+/** Stealth placeholders until launch — swap these strings only. */
+export const contact = {
+	psychologistName: "Name here",
+	addressLine: "Address here",
+	cityLine: "City here",
+	phone: "Phone here",
+	email: "Email here",
+} as const;
+
 export const ui = {
 	da: {
 		navHome: "Hjem",
@@ -15,6 +24,15 @@ export const ui = {
 		navPractical: "Praktisk",
 		lastUpdatedOn: "Sidst opdateret",
 		langSwitchLabel: "Sprog",
+		ctaPractical: "Praktisk information",
+		ctaBackground: "Baggrund",
+		footerBrandTag: "psykologpraksis",
+		footerContactHeading: "Kontakt",
+		footerCredentialAuthorised: "Autoriseret psykolog",
+		footerCredentialMember: "Medlem af Dansk Psykolog Forening",
+		dpLogoAlt: "Dansk Psykolog Forening",
+		menuOpen: "Åbn menu",
+		menuClose: "Luk menu",
 	},
 	en: {
 		navHome: "Home",
@@ -22,6 +40,15 @@ export const ui = {
 		navPractical: "Practical",
 		lastUpdatedOn: "Last updated on",
 		langSwitchLabel: "Language",
+		ctaPractical: "Practical information",
+		ctaBackground: "Background",
+		footerBrandTag: "psychology practice",
+		footerContactHeading: "Contact",
+		footerCredentialAuthorised: "Authorised psychologist",
+		footerCredentialMember: "Member of the Danish Psychological Association",
+		dpLogoAlt: "Danish Psychological Association",
+		menuOpen: "Open menu",
+		menuClose: "Close menu",
 	},
 } as const;
 
