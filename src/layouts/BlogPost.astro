@@ -19,7 +19,6 @@ const {
 	description,
 	pubDate,
 	updatedDate,
-	heroImage,
 	lang = defaultLocale,
 } = Astro.props;
 ---
@@ -27,72 +26,35 @@ const {
 <html lang={lang}>
 	<head>
 		<BaseHead title={title} description={description} lang={lang} />
-		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
-			}
-			.hero-image {
-				width: 100%;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
-			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
-			}
-			.last-updated-on {
-				font-style: italic;
-			}
-		</style>
 	</head>
 
-	<body>
-		<Header lang={lang} />
+	<body class="inner-page">
+		<div class="page-atmosphere" aria-hidden="true">
+			<div class="page-atmosphere-photo"></div>
+			<div class="page-atmosphere-overlay"></div>
+			<div class="page-atmosphere-fade"></div>
+		</div>
+		<Header lang={lang} atmosphere />
 		<main>
 			<article>
-				<div class="hero-image">
-					{heroImage && <img width={1020} height={510} src={heroImage} alt="" />}
-				</div>
+				<header class="title">
+					{
+						pubDate && (
+							<div class="date">
+								<FormattedDate date={pubDate} lang={lang} />
+								{updatedDate && (
+									<div class="last-updated-on">
+										{t(lang, 'lastUpdatedOn')}{' '}
+										<FormattedDate date={updatedDate} lang={lang} />
+									</div>
+								)}
+							</div>
+						)
+					}
+					<h1>{title}</h1>
+					{description && <p class="page-desc">{description}</p>}
+				</header>
 				<div class="prose">
-					<div class="title">
-						{
-							pubDate && (
-								<div class="date">
-									<FormattedDate date={pubDate} lang={lang} />
-									{updatedDate && (
-										<div class="last-updated-on">
-											{t(lang, 'lastUpdatedOn')}{' '}
-											<FormattedDate date={updatedDate} lang={lang} />
-										</div>
-									)}
-								</div>
-							)
-						}
-						<h1>{title}</h1>
-						<hr />
-					</div>
 					<slot />
 				</div>
 			</article>
@@ -100,3 +62,108 @@ const {
 		<Footer lang={lang} />
 	</body>
 </html>
+
+<style is:global>
+	body.inner-page {
+		position: relative;
+		background: var(--ground);
+	}
+
+	/* H2 Heavy mist — pre-blurred hero crop, no live filter */
+	body.inner-page .page-atmosphere {
+		position: absolute;
+		inset: 0 0 auto;
+		height: 22rem;
+		overflow: hidden;
+		pointer-events: none;
+		z-index: 0;
+	}
+
+	body.inner-page .page-atmosphere-photo {
+		position: absolute;
+		inset: 0;
+		background-image: image-set(
+			url('/images/hero-atmosphere.webp') type('image/webp'),
+			url('/images/hero-atmosphere.jpg') type('image/jpeg')
+		);
+		background-size: cover;
+		background-position: center 40%;
+		background-repeat: no-repeat;
+	}
+
+	body.inner-page .page-atmosphere-overlay {
+		position: absolute;
+		inset: 0;
+		background: color-mix(in srgb, var(--ground) 42%, transparent);
+	}
+
+	body.inner-page .page-atmosphere-fade {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(
+			180deg,
+			transparent 0%,
+			color-mix(in srgb, var(--ground) 40%, transparent) 50%,
+			var(--ground) 100%
+		);
+	}
+
+	body.inner-page > :not(.page-atmosphere) {
+		position: relative;
+		z-index: 1;
+	}
+</style>
+
+<style>
+	main {
+		width: 100%;
+		max-width: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.title {
+		width: min(40rem, calc(100% - 2.5rem));
+		margin: 0 auto;
+		padding: 2rem 0 1.75rem;
+		text-align: left;
+		line-height: 1.2;
+	}
+
+	.title h1 {
+		margin: 0 0 0.45em;
+		font-size: clamp(2.1rem, 5vw, 2.85rem);
+		max-width: 14ch;
+	}
+
+	.page-desc {
+		margin: 0;
+		font-size: 1.1rem;
+		line-height: 1.55;
+		color: var(--quiet);
+		max-width: 34em;
+	}
+
+	.date {
+		margin-bottom: 0.65em;
+		color: var(--quiet);
+		font-size: 0.95rem;
+	}
+
+	.last-updated-on {
+		font-style: italic;
+	}
+
+	.prose {
+		width: min(40rem, calc(100% - 2.5rem));
+		margin: 0 auto;
+		padding: 0 0 4rem;
+		color: var(--ink);
+	}
+
+	@media (max-width: 720px) {
+		.title {
+			padding: 1.5rem 0 1.35rem;
+		}
+	}
+</style>

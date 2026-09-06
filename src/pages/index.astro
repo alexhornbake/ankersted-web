@@ -1,33 +1,5 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
-import { getEntry, render } from 'astro:content';
-
-const lang = 'da' as const;
-const page = await getEntry('pages', lang);
-if (!page) {
-	throw new Error(`Could not find page "${lang}" in content collection "pages"`);
-}
-const { Content } = await render(page);
+import HomeLayout from '../components/HomeLayout.astro';
 ---
 
-<!doctype html>
-<html lang={lang}>
-	<head>
-		<BaseHead
-			title={page.data.title || SITE_TITLE}
-			description={page.data.description || SITE_DESCRIPTION}
-			lang={lang}
-		/>
-	</head>
-	<body>
-		<Header lang={lang} />
-		<main>
-			<h1>{page.data.title}</h1>
-			<Content />
-		</main>
-		<Footer lang={lang} />
-	</body>
-</html>
+<HomeLayout lang="da" />

@@ -1,0 +1,279 @@
+---
+/**
+ * Dev-only typography study. Not linked from site nav.
+ * Compare pairings with the same Ankersted copy + warm olive palette.
+ */
+const options = [
+	{
+		id: 'A',
+		display: 'Atkinson',
+		body: 'Atkinson',
+		displayFamily: '"Atkinson", sans-serif',
+		bodyFamily: '"Atkinson", sans-serif',
+		rationale: 'Accessible baseline; slightly “blog/tech”.',
+	},
+	{
+		id: 'B',
+		display: 'Figtree',
+		body: 'Atkinson',
+		displayFamily: '"Figtree", sans-serif',
+		bodyFamily: '"Atkinson", sans-serif',
+		rationale: 'Soft modern humanist sans; calm, contemporary clinic.',
+	},
+	{
+		id: 'C',
+		display: 'Fraunces',
+		body: 'Atkinson',
+		displayFamily: '"Fraunces", serif',
+		bodyFamily: '"Atkinson", sans-serif',
+		rationale: 'Gentle organic serif for brand; nature without broadsheet drama.',
+	},
+	{
+		id: 'D',
+		display: 'Source Serif 4',
+		body: 'Source Sans 3',
+		displayFamily: '"Source Serif 4", serif',
+		bodyFamily: '"Source Sans 3", sans-serif',
+		rationale: 'Editorial warmth; coherent family; more “literary practice”.',
+	},
+	{
+		id: 'E',
+		display: 'Literata',
+		body: 'Atkinson',
+		displayFamily: '"Literata", serif',
+		bodyFamily: '"Atkinson", sans-serif',
+		rationale: 'Quiet bookish display; grounded, less trendy than high-contrast serifs.',
+	},
+] as const;
+---
+
+<!doctype html>
+<html lang="da">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="robots" content="noindex" />
+		<title>Type study · Ankersted</title>
+		<link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin />
+		<link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Literata:opsz,wght@7..72,400;7..72,600;7..72,700&family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap"
+			rel="stylesheet"
+		/>
+		<style is:global>
+			@font-face {
+				font-family: 'Atkinson';
+				src: url('/fonts/atkinson-regular.woff') format('woff');
+				font-weight: 400;
+				font-style: normal;
+				font-display: swap;
+			}
+			@font-face {
+				font-family: 'Atkinson';
+				src: url('/fonts/atkinson-bold.woff') format('woff');
+				font-weight: 700;
+				font-style: normal;
+				font-display: swap;
+			}
+
+			:root {
+				--ground: #f7f4ef;
+				--ink: #2a2620;
+				--quiet: #6b645a;
+				--olive: #5c6b4a;
+				--olive-soft: #e8ede2;
+				--caramel: #c4a574;
+			}
+
+			* {
+				box-sizing: border-box;
+			}
+
+			body {
+				margin: 0;
+				padding: 0;
+				background: var(--ground);
+				color: var(--ink);
+				font-family: 'Atkinson', sans-serif;
+				font-size: 18px;
+				line-height: 1.6;
+			}
+
+			.page {
+				max-width: 720px;
+				margin: 0 auto;
+				padding: 2.5rem 1.25rem 4rem;
+			}
+
+			.intro h1 {
+				font-size: 1.5rem;
+				margin: 0 0 0.5rem;
+			}
+
+			.intro p {
+				margin: 0 0 0.75rem;
+				color: var(--quiet);
+			}
+
+			.intro .note {
+				font-size: 0.9rem;
+				margin-bottom: 2rem;
+			}
+
+			.option {
+				margin-bottom: 2.5rem;
+				padding: 1.5rem 1.25rem 1.75rem;
+				background: #fffcf8;
+				border: 1px solid color-mix(in srgb, var(--olive) 18%, transparent);
+				border-radius: 4px;
+			}
+
+			.option-meta {
+				display: flex;
+				flex-wrap: wrap;
+				align-items: baseline;
+				gap: 0.5rem 1rem;
+				margin-bottom: 1.25rem;
+				padding-bottom: 0.75rem;
+				border-bottom: 1px solid color-mix(in srgb, var(--olive) 15%, transparent);
+			}
+
+			.option-id {
+				font-family: 'Atkinson', sans-serif;
+				font-weight: 700;
+				font-size: 0.85rem;
+				letter-spacing: 0.04em;
+				text-transform: uppercase;
+				color: var(--olive);
+			}
+
+			.option-names {
+				font-family: 'Atkinson', sans-serif;
+				font-size: 0.9rem;
+				color: var(--quiet);
+			}
+
+			.option-rationale {
+				font-family: 'Atkinson', sans-serif;
+				font-size: 0.85rem;
+				color: var(--quiet);
+				width: 100%;
+				margin: 0;
+			}
+
+			.hero-strip {
+				display: flex;
+				flex-direction: column;
+				gap: 0.65rem;
+			}
+
+			.brand {
+				font-size: clamp(2.4rem, 6vw, 3.4rem);
+				font-weight: 700;
+				line-height: 1.1;
+				letter-spacing: -0.02em;
+				margin: 0;
+				color: var(--ink);
+			}
+
+			.headline {
+				font-size: clamp(1.35rem, 3.2vw, 1.75rem);
+				font-weight: 600;
+				line-height: 1.25;
+				margin: 0;
+				color: var(--ink);
+			}
+
+			.body-sample {
+				font-size: 1.05rem;
+				line-height: 1.7;
+				margin: 0.35rem 0 0;
+				max-width: 38em;
+				color: var(--ink);
+			}
+
+			.nav-row {
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				gap: 1rem;
+				margin-top: 0.85rem;
+			}
+
+			.nav-label {
+				font-size: 0.95rem;
+				font-weight: 600;
+				color: var(--ink);
+				text-decoration: none;
+				border-bottom: 2px solid var(--olive);
+				padding-bottom: 0.1rem;
+			}
+
+			.cta {
+				display: inline-block;
+				font-size: 0.95rem;
+				font-weight: 600;
+				color: #fffcf8;
+				background: var(--olive);
+				padding: 0.55rem 1.1rem;
+				border-radius: 4px;
+				text-decoration: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="page">
+			<header class="intro">
+				<h1>Ankersted type study</h1>
+				<p>
+					Same copy and palette; only typography changes. Pick an option ID (A–E) for the
+					redesign.
+				</p>
+				<p class="note">
+					Resize the browser to check mobile. This page is not linked from the live site.
+				</p>
+			</header>
+
+			{
+				options.map((opt) => (
+					<section class="option" aria-labelledby={`opt-${opt.id}`}>
+						<div class="option-meta">
+							<span class="option-id" id={`opt-${opt.id}`}>
+								Option {opt.id}
+							</span>
+							<span class="option-names">
+								{opt.display} + {opt.body}
+							</span>
+							<p class="option-rationale">{opt.rationale}</p>
+						</div>
+						<div
+							class="hero-strip"
+							style={`--display: ${opt.displayFamily}; --body: ${opt.bodyFamily};`}
+						>
+							<p class="brand" style="font-family: var(--display);">
+								Ankersted
+							</p>
+							<p class="headline" style="font-family: var(--display);">
+								Når livet kalder på et holdepunkt
+							</p>
+							<p class="body-sample" style="font-family: var(--body);">
+								Terapi kan ikke fjerne livets bølger, men den kan hjælpe dig med at
+								finde ro og vælge retning midt i dem.
+							</p>
+							<div class="nav-row">
+								<span class="nav-label" style="font-family: var(--body);">
+									Baggrund
+								</span>
+								<span class="cta" style="font-family: var(--display);">
+									Praktisk information
+								</span>
+							</div>
+						</div>
+					</section>
+				))
+			}
+		</div>
+	</body>
+</html>
