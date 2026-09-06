@@ -1,11 +1,11 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
 import { getEntry, render } from 'astro:content';
 
-const lang = 'da' as const;
+const lang = 'en' as const;
 const page = await getEntry('pages', lang);
 if (!page) {
 	throw new Error(`Could not find page "${lang}" in content collection "pages"`);

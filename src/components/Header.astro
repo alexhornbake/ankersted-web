@@ -1,14 +1,45 @@
 ---
 import HeaderLink from './HeaderLink.astro';
 import { SITE_TITLE } from '../consts';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import {
+	defaultLocale,
+	getLangFromPath,
+	swapLocalePath,
+	t,
+	type Locale,
+} from '../i18n/ui';
+
+interface Props {
+	lang?: Locale;
+}
+
+const lang = Astro.props.lang ?? getLangFromPath(Astro.url.pathname) ?? defaultLocale;
+const homeHref = getRelativeLocaleUrl(lang, '');
+const baggrundHref = getRelativeLocaleUrl(lang, 'baggrund');
+const praktiskHref = getRelativeLocaleUrl(lang, 'praktisk-information');
 ---
 
 <header>
 	<nav>
-		<h2><a href="/">{SITE_TITLE}</a></h2>
+		<h2><a href={homeHref}>{SITE_TITLE}</a></h2>
 		<div class="internal-links">
-			<HeaderLink href="/">Hjem</HeaderLink>
-			<HeaderLink href="/baggrund">Baggrund</HeaderLink>
+			<HeaderLink href={homeHref}>{t(lang, 'navHome')}</HeaderLink>
+			<HeaderLink href={baggrundHref}>{t(lang, 'navBackground')}</HeaderLink>
+			<HeaderLink href={praktiskHref}>{t(lang, 'navPractical')}</HeaderLink>
+		</div>
+		<div class="lang-switch" aria-label={t(lang, 'langSwitchLabel')}>
+			<a
+				href={swapLocalePath(Astro.url.pathname, 'da')}
+				aria-current={lang === 'da' ? 'page' : undefined}
+				class:list={[{ active: lang === 'da' }]}>DA</a
+			>
+			<span aria-hidden="true">|</span>
+			<a
+				href={swapLocalePath(Astro.url.pathname, 'en')}
+				aria-current={lang === 'en' ? 'page' : undefined}
+				class:list={[{ active: lang === 'en' }]}>EN</a
+			>
 		</div>
 	</nav>
 </header>
@@ -32,6 +63,12 @@ import { SITE_TITLE } from '../consts';
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		gap: 1em;
+		flex-wrap: wrap;
+	}
+	.internal-links {
+		display: flex;
+		flex-wrap: wrap;
 	}
 	nav a {
 		padding: 1em 0.5em;
@@ -43,13 +80,25 @@ import { SITE_TITLE } from '../consts';
 		text-decoration: none;
 		border-bottom-color: var(--accent);
 	}
-	.social-links,
-	.social-links a {
+	.lang-switch {
 		display: flex;
+		align-items: center;
+		gap: 0.35em;
+		font-size: 0.9em;
+	}
+	.lang-switch a {
+		padding: 0.5em 0.25em;
+		border-bottom: none;
+		opacity: 0.55;
+	}
+	.lang-switch a.active {
+		opacity: 1;
+		font-weight: 700;
+		border-bottom: none;
 	}
 	@media (max-width: 720px) {
-		.social-links {
-			display: none;
+		.lang-switch {
+			margin-left: auto;
 		}
 	}
 </style>

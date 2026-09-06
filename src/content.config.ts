@@ -21,13 +21,12 @@ const blog = defineCollection({
 });
 
 const pages = defineCollection({
-	// Load Markdoc files (and markdown for compatibility) in the `src/content/pages/` directory.
+	// Locale folders: da/*.mdoc, en/*.mdoc — entry ids like `da/baggrund`
 	loader: glob({
 		base: "./src/content/pages",
 		pattern: "**/*.{md,mdoc}",
 	}),
 
-	// Type-check frontmatter using a schema
 	schema: z.object({
 		title: z.string(),
 		description: z.string(),
@@ -38,7 +37,7 @@ const pages = defineCollection({
 const footer = defineCollection({
 	loader: glob({
 		base: "./src/content/footer",
-		pattern: "**/*.mdoc",
+		pattern: "*/index.mdoc",
 	}),
 	schema: z.object({}),
 });
