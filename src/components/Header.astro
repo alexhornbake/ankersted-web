@@ -22,6 +22,7 @@ const transparent = Astro.props.transparent ?? false;
 const atmosphere = Astro.props.atmosphere ?? false;
 const homeHref = getRelativeLocaleUrl(lang, '');
 const baggrundHref = getRelativeLocaleUrl(lang, 'baggrund');
+const tilgangHref = getRelativeLocaleUrl(lang, 'tilgang');
 const praktiskHref = getRelativeLocaleUrl(lang, 'praktisk-information');
 const menuId = 'site-nav-panel';
 ---
@@ -33,6 +34,7 @@ const menuId = 'site-nav-panel';
 		<div class="internal-links desktop-nav">
 			<HeaderLink href={homeHref}>{t(lang, 'navHome')}</HeaderLink>
 			<HeaderLink href={baggrundHref}>{t(lang, 'navBackground')}</HeaderLink>
+			<HeaderLink href={tilgangHref}>{t(lang, 'navApproach')}</HeaderLink>
 			<HeaderLink href={praktiskHref}>{t(lang, 'navPractical')}</HeaderLink>
 		</div>
 
@@ -73,6 +75,7 @@ const menuId = 'site-nav-panel';
 		<div class="mobile-links">
 			<HeaderLink href={homeHref}>{t(lang, 'navHome')}</HeaderLink>
 			<HeaderLink href={baggrundHref}>{t(lang, 'navBackground')}</HeaderLink>
+			<HeaderLink href={tilgangHref}>{t(lang, 'navApproach')}</HeaderLink>
 			<HeaderLink href={praktiskHref}>{t(lang, 'navPractical')}</HeaderLink>
 		</div>
 	</div>

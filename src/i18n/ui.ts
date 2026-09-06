@@ -21,6 +21,7 @@ export const ui = {
 	da: {
 		navHome: "Hjem",
 		navBackground: "Baggrund",
+		navApproach: "Tilgang",
 		navPractical: "Praktisk",
 		lastUpdatedOn: "Sidst opdateret",
 		langSwitchLabel: "Sprog",
@@ -37,6 +38,7 @@ export const ui = {
 	en: {
 		navHome: "Home",
 		navBackground: "Background",
+		navApproach: "Approach",
 		navPractical: "Practical",
 		lastUpdatedOn: "Last updated on",
 		langSwitchLabel: "Language",
