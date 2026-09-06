@@ -14,6 +14,7 @@
 		"invocation_logs": true
 	},
 	"upload_source_maps": true,
+	"preview_urls": true,
 	"routes": [
 		{
 			"pattern": "ankersted.dk",
