@@ -1,0 +1,536 @@
+---
+/**
+ * Dev-only: inner page atmosphere study.
+ * Live layout; color washes + blurred hero-photo options.
+ */
+
+type WashOption = {
+	id: string;
+	name: string;
+	rationale: string;
+	dark: boolean;
+	kind: 'wash';
+	atmosphere: string;
+};
+
+type PhotoOption = {
+	id: string;
+	name: string;
+	rationale: string;
+	dark: boolean;
+	kind: 'photo';
+	blur: string;
+	position: string;
+	overlay: string;
+	fade: string;
+};
+
+const washes: WashOption[] = [
+	{
+		id: 'C0',
+		name: 'Current (baseline)',
+		rationale: 'What ships today — olive-soft into caramel.',
+		dark: false,
+		kind: 'wash',
+		atmosphere: `linear-gradient(
+			180deg,
+			color-mix(in srgb, #e8ede2 40%, #c4a574) 0%,
+			#e8ede2 4.5rem,
+			color-mix(in srgb, #f7f4ef 55%, #e8ede2) 12rem,
+			#f7f4ef 100%
+		)`,
+	},
+	{
+		id: 'C1',
+		name: 'Cognac leather',
+		rationale: 'Hero tan chair — warm ochre into cream daylight.',
+		dark: false,
+		kind: 'wash',
+		atmosphere: `linear-gradient(
+			180deg,
+			#c9a06a 0%,
+			#e8d4b5 5rem,
+			#f3ebe0 11rem,
+			#f7f4ef 100%
+		)`,
+	},
+	{
+		id: 'C2',
+		name: 'Olive chair',
+		rationale: 'Hero fabric armchair — muted moss into soft sage.',
+		dark: false,
+		kind: 'wash',
+		atmosphere: `linear-gradient(
+			180deg,
+			#8a9168 0%,
+			#c5c9a8 5rem,
+			#e8ebe0 11rem,
+			#f7f4ef 100%
+		)`,
+	},
+	{
+		id: 'C3',
+		name: 'Leaf canopy',
+		rationale: 'Monstera greens — deeper forest softening to pale leaf.',
+		dark: false,
+		kind: 'wash',
+		atmosphere: `linear-gradient(
+			180deg,
+			#4a6b4e 0%,
+			#8fad8a 5.5rem,
+			#dce8d8 12rem,
+			#f7f4ef 100%
+		)`,
+	},
+	{
+		id: 'C4',
+		name: 'Leather → olive',
+		rationale: 'Both chairs — cognac into moss, then cream.',
+		dark: false,
+		kind: 'wash',
+		atmosphere: `linear-gradient(
+			135deg,
+			#c4a574 0%,
+			#a8986a 35%,
+			#9aa87a 55%,
+			#e4e8da 82%,
+			#f7f4ef 100%
+		)`,
+	},
+	{
+		id: 'C5',
+		name: 'Dark canopy (white text)',
+		rationale: 'Deep leaf shadow / walnut — darker wash, light chrome.',
+		dark: true,
+		kind: 'wash',
+		atmosphere: `linear-gradient(
+			180deg,
+			#2a3328 0%,
+			#3d4a38 5rem,
+			#5c6b4a 10rem,
+			color-mix(in srgb, #5c6b4a 35%, #f7f4ef) 16rem,
+			#f7f4ef 100%
+		)`,
+	},
+];
+
+const photos: PhotoOption[] = [
+	{
+		id: 'H1',
+		name: 'Soft room echo',
+		rationale: 'Blurred crop of the home hero — still readable as the room, fades to ground.',
+		dark: false,
+		kind: 'photo',
+		blur: '18px',
+		position: 'center 42%',
+		overlay: 'color-mix(in srgb, #f7f4ef 28%, transparent)',
+		fade: `linear-gradient(
+			180deg,
+			transparent 0%,
+			transparent 35%,
+			color-mix(in srgb, #f7f4ef 55%, transparent) 68%,
+			#f7f4ef 100%
+		)`,
+	},
+	{
+		id: 'H2',
+		name: 'Heavy mist',
+		rationale: 'Strong blur — mostly tone from the photo, almost a wash, but tied to the hero.',
+		dark: false,
+		kind: 'photo',
+		blur: '36px',
+		position: 'center 40%',
+		overlay: 'color-mix(in srgb, #f7f4ef 42%, transparent)',
+		fade: `linear-gradient(
+			180deg,
+			transparent 0%,
+			color-mix(in srgb, #f7f4ef 40%, transparent) 50%,
+			#f7f4ef 100%
+		)`,
+	},
+	{
+		id: 'H3',
+		name: 'Warm veil',
+		rationale: 'Medium blur + caramel cream veil — photo texture without competing with type.',
+		dark: false,
+		kind: 'photo',
+		blur: '22px',
+		position: 'center 48%',
+		overlay: 'color-mix(in srgb, #e8d4b5 45%, transparent)',
+		fade: `linear-gradient(
+			180deg,
+			transparent 0%,
+			color-mix(in srgb, #f7f4ef 50%, transparent) 55%,
+			#f7f4ef 100%
+		)`,
+	},
+	{
+		id: 'H4',
+		name: 'Dark room (white text)',
+		rationale: 'Blurred hero under a deep scrim — white chrome/title, body on ground.',
+		dark: true,
+		kind: 'photo',
+		blur: '20px',
+		position: 'center 38%',
+		overlay: 'color-mix(in srgb, #1e241c 58%, transparent)',
+		fade: `linear-gradient(
+			180deg,
+			transparent 0%,
+			color-mix(in srgb, #2a3328 40%, transparent) 45%,
+			color-mix(in srgb, #f7f4ef 70%, #3d4a38) 78%,
+			#f7f4ef 100%
+		)`,
+	},
+];
+
+const bodySample =
+	'Jeg er uddannet psykolog med PhD og har taget min uddannelse både USA og Danmark. Gennem mit arbejde har jeg mødt mennesker med mange forskellige baggrunde og i mange forskellige livssituationer.';
+
+const heroSrc = '/images/hero-inspiration.jpg';
+---
+
+<!doctype html>
+<html lang="da">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="robots" content="noindex" />
+		<title>Atmosphere color study · Ankersted</title>
+		<link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin />
+		<link rel="preload" href="/fonts/fraunces-opsz.woff2" as="font" type="font/woff2" crossorigin />
+		<style is:global>
+			@font-face {
+				font-family: 'Atkinson';
+				src: url('/fonts/atkinson-regular.woff') format('woff');
+				font-weight: 400;
+				font-display: swap;
+			}
+			@font-face {
+				font-family: 'Atkinson';
+				src: url('/fonts/atkinson-bold.woff') format('woff');
+				font-weight: 700;
+				font-display: swap;
+			}
+			@font-face {
+				font-family: 'Fraunces';
+				src: url('/fonts/fraunces-opsz.woff2') format('woff2-variations');
+				font-weight: 400 700;
+				font-display: swap;
+			}
+
+			:root {
+				--ground: #f7f4ef;
+				--ink: #2a2620;
+				--quiet: #6b645a;
+				--olive: #5c6b4a;
+				--font-display: 'Fraunces', serif;
+				--font-body: 'Atkinson', sans-serif;
+			}
+
+			* {
+				box-sizing: border-box;
+			}
+
+			body {
+				margin: 0;
+				padding: 0 0 4rem;
+				background: #e5e1da;
+				color: var(--ink);
+				font-family: var(--font-body);
+				font-size: 17px;
+				line-height: 1.55;
+			}
+
+			.page {
+				max-width: 56rem;
+				margin: 0 auto;
+				padding: 2rem 1.25rem 0;
+			}
+
+			.intro h1 {
+				font-family: var(--font-display);
+				font-optical-sizing: auto;
+				font-size: 1.55rem;
+				margin: 0 0 0.5rem;
+			}
+
+			.intro p {
+				margin: 0 0 0.55rem;
+				color: var(--quiet);
+				max-width: 42rem;
+			}
+
+			.section-label {
+				font-size: 0.8rem;
+				font-weight: 700;
+				letter-spacing: 0.06em;
+				text-transform: uppercase;
+				color: var(--olive);
+				margin: 2rem 0 1rem;
+			}
+
+			.option {
+				margin-bottom: 2.25rem;
+			}
+
+			.option-id {
+				font-weight: 700;
+				font-size: 0.85rem;
+				letter-spacing: 0.04em;
+				text-transform: uppercase;
+				color: var(--olive);
+			}
+
+			.option-name {
+				font-weight: 600;
+				margin-left: 0.5rem;
+			}
+
+			.option-rationale {
+				margin: 0.3rem 0 0.7rem;
+				font-size: 0.9rem;
+				color: var(--quiet);
+			}
+
+			.mock {
+				position: relative;
+				border: 1px solid color-mix(in srgb, var(--olive) 18%, transparent);
+				border-radius: 4px;
+				overflow: hidden;
+				background: var(--ground);
+				color: var(--ink);
+			}
+
+			.mock-atmosphere {
+				position: absolute;
+				inset: 0 0 auto;
+				height: 18rem;
+				pointer-events: none;
+				z-index: 0;
+			}
+
+			.mock-atmosphere--photo {
+				height: 20rem;
+				overflow: hidden;
+			}
+
+			.mock-photo {
+				position: absolute;
+				/* Extra bleed so blur doesn’t hard-clip */
+				inset: -2.5rem;
+				background-size: cover;
+				background-repeat: no-repeat;
+				transform: scale(1.08);
+			}
+
+			.mock-overlay,
+			.mock-fade {
+				position: absolute;
+				inset: 0;
+			}
+
+			.mock-chrome,
+			.mock-main {
+				position: relative;
+				z-index: 1;
+			}
+
+			.mock-chrome {
+				display: grid;
+				grid-template-columns: 1fr auto 1fr;
+				align-items: center;
+				max-width: 48rem;
+				margin: 0 auto;
+				padding: 0 1.25rem;
+				min-height: 3.6rem;
+				font-size: 0.85rem;
+			}
+
+			.mock-brand {
+				font-family: var(--font-display);
+				font-optical-sizing: auto;
+				font-weight: 700;
+				font-size: 1.05rem;
+				justify-self: start;
+			}
+
+			.mock-nav {
+				display: flex;
+				gap: 1.1rem;
+				justify-self: center;
+				color: var(--quiet);
+			}
+
+			.mock-nav .on {
+				color: var(--ink);
+				border-bottom: 2px solid var(--olive);
+				padding-bottom: 0.1rem;
+			}
+
+			.mock-lang {
+				justify-self: end;
+				opacity: 0.75;
+			}
+
+			.mock-lang strong {
+				opacity: 1;
+				font-weight: 700;
+			}
+
+			.mock-main {
+				width: min(40rem, calc(100% - 2.5rem));
+				margin: 0 auto;
+				padding: 1.75rem 0 2rem;
+			}
+
+			.mock-title {
+				font-family: var(--font-display);
+				font-optical-sizing: auto;
+				font-size: clamp(2rem, 4vw, 2.6rem);
+				font-weight: 700;
+				line-height: 1.15;
+				margin: 0 0 0.4em;
+				max-width: 14ch;
+			}
+
+			.mock-desc {
+				margin: 0 0 1.75rem;
+				font-size: 1.08rem;
+				line-height: 1.5;
+				max-width: 34em;
+				color: var(--quiet);
+			}
+
+			.mock-prose {
+				margin: 0;
+				font-size: 1rem;
+				line-height: 1.7;
+			}
+
+			.mock.dark .mock-chrome,
+			.mock.dark .mock-title,
+			.mock.dark .mock-desc {
+				color: #fffcf8;
+			}
+
+			.mock.dark .mock-nav {
+				color: color-mix(in srgb, #fffcf8 70%, transparent);
+			}
+
+			.mock.dark .mock-nav .on {
+				color: #fffcf8;
+				border-bottom-color: color-mix(in srgb, #fffcf8 85%, transparent);
+			}
+
+			.mock.dark .mock-lang {
+				color: color-mix(in srgb, #fffcf8 70%, transparent);
+			}
+
+			.mock.dark .mock-prose {
+				color: var(--ink);
+			}
+
+			@media (max-width: 560px) {
+				.mock-chrome {
+					display: flex;
+					justify-content: space-between;
+				}
+
+				.mock-nav {
+					display: none;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="page">
+			<header class="intro">
+				<h1>Atmosphere study</h1>
+				<p>
+					Same layout as live inner pages. Color washes from the hero palette, plus blurred
+					fades of the home hero photo. Pick a C or H ID.
+				</p>
+			</header>
+
+			<p class="section-label">Blurred hero photo</p>
+
+			{
+				photos.map((opt) => (
+					<section class="option" aria-labelledby={`h-${opt.id}`}>
+						<div>
+							<span class="option-id" id={`h-${opt.id}`}>
+								{opt.id}
+							</span>
+							<span class="option-name">{opt.name}</span>
+							<p class="option-rationale">{opt.rationale}</p>
+						</div>
+						<div class:list={['mock', { dark: opt.dark }]}>
+							<div class="mock-atmosphere mock-atmosphere--photo" aria-hidden="true">
+								<div
+									class="mock-photo"
+									style={`background-image: url('${heroSrc}'); background-position: ${opt.position}; filter: blur(${opt.blur});`}
+								/>
+								<div class="mock-overlay" style={`background: ${opt.overlay};`} />
+								<div class="mock-fade" style={`background: ${opt.fade};`} />
+							</div>
+							<div class="mock-chrome">
+								<span class="mock-brand">Ankersted</span>
+								<div class="mock-nav">
+									<span>Hjem</span>
+									<span class="on">Baggrund</span>
+									<span>Praktisk</span>
+								</div>
+								<span class="mock-lang">
+									<strong>DA</strong> | EN
+								</span>
+							</div>
+							<div class="mock-main">
+								<h2 class="mock-title">Baggrund</h2>
+								<p class="mock-desc">Om psykologen bag Ankersted</p>
+								<p class="mock-prose">{bodySample}</p>
+							</div>
+						</div>
+					</section>
+				))
+			}
+
+			<p class="section-label">Hero-toned washes</p>
+
+			{
+				washes.map((opt) => (
+					<section class="option" aria-labelledby={`c-${opt.id}`}>
+						<div>
+							<span class="option-id" id={`c-${opt.id}`}>
+								{opt.id}
+							</span>
+							<span class="option-name">{opt.name}</span>
+							<p class="option-rationale">{opt.rationale}</p>
+						</div>
+						<div class:list={['mock', { dark: opt.dark }]}>
+							<div
+								class="mock-atmosphere"
+								style={`background: ${opt.atmosphere};`}
+							/>
+							<div class="mock-chrome">
+								<span class="mock-brand">Ankersted</span>
+								<div class="mock-nav">
+									<span>Hjem</span>
+									<span class="on">Baggrund</span>
+									<span>Praktisk</span>
+								</div>
+								<span class="mock-lang">
+									<strong>DA</strong> | EN
+								</span>
+							</div>
+							<div class="mock-main">
+								<h2 class="mock-title">Baggrund</h2>
+								<p class="mock-desc">Om psykologen bag Ankersted</p>
+								<p class="mock-prose">{bodySample}</p>
+							</div>
+						</div>
+					</section>
+				))
+			}
+		</div>
+	</body>
+</html>

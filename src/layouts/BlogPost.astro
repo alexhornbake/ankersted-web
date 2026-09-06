@@ -29,7 +29,11 @@ const {
 	</head>
 
 	<body class="inner-page">
-		<div class="page-atmosphere" aria-hidden="true"></div>
+		<div class="page-atmosphere" aria-hidden="true">
+			<div class="page-atmosphere-photo"></div>
+			<div class="page-atmosphere-overlay"></div>
+			<div class="page-atmosphere-fade"></div>
+		</div>
 		<Header lang={lang} atmosphere />
 		<main>
 			<article>
@@ -65,17 +69,41 @@ const {
 		background: var(--ground);
 	}
 
+	/* H2 Heavy mist — pre-blurred hero crop, no live filter */
 	body.inner-page .page-atmosphere {
 		position: absolute;
 		inset: 0 0 auto;
 		height: 22rem;
+		overflow: hidden;
 		pointer-events: none;
 		z-index: 0;
+	}
+
+	body.inner-page .page-atmosphere-photo {
+		position: absolute;
+		inset: 0;
+		background-image: image-set(
+			url('/images/hero-atmosphere.webp') type('image/webp'),
+			url('/images/hero-atmosphere.jpg') type('image/jpeg')
+		);
+		background-size: cover;
+		background-position: center 40%;
+		background-repeat: no-repeat;
+	}
+
+	body.inner-page .page-atmosphere-overlay {
+		position: absolute;
+		inset: 0;
+		background: color-mix(in srgb, var(--ground) 42%, transparent);
+	}
+
+	body.inner-page .page-atmosphere-fade {
+		position: absolute;
+		inset: 0;
 		background: linear-gradient(
 			180deg,
-			color-mix(in srgb, var(--olive-soft) 40%, var(--caramel)) 0%,
-			var(--olive-soft) 4.5rem,
-			color-mix(in srgb, var(--ground) 55%, var(--olive-soft)) 12rem,
+			transparent 0%,
+			color-mix(in srgb, var(--ground) 40%, transparent) 50%,
 			var(--ground) 100%
 		);
 	}
