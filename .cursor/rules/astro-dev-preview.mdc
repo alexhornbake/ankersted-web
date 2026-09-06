@@ -1,0 +1,11 @@
+---
+description: Run Astro locally and verify UI changes in the browser
+alwaysApply: true
+---
+
+# Astro Dev Preview
+
+- Start with `npm run dev`. Default URL: `http://localhost:4321`
+- Before starting, check terminals for an existing `astro dev` / `npm run dev` and reuse it
+- Wait for the local URL before browsing
+- After pages, layouts, components, styles, or content changes, open the affected URL in the browser and confirm the result before considering the task done

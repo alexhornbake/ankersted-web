@@ -1,18 +1,32 @@
 ---
-import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
+import { defaultLocale, t, type Locale } from '../i18n/ui';
 
-type Props = CollectionEntry<'blog'>['data'];
+interface Props {
+	title: string;
+	description: string;
+	pubDate?: Date;
+	updatedDate?: Date;
+	heroImage?: string;
+	lang?: Locale;
+}
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const {
+	title,
+	description,
+	pubDate,
+	updatedDate,
+	heroImage,
+	lang = defaultLocale,
+} = Astro.props;
 ---
 
-<html lang="en">
+<html lang={lang}>
 	<head>
-		<BaseHead title={title} description={description} />
+		<BaseHead title={title} description={description} lang={lang} />
 		<style>
 			main {
 				width: calc(100% - 2em);
@@ -55,7 +69,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 	</head>
 
 	<body>
-		<Header />
+		<Header lang={lang} />
 		<main>
 			<article>
 				<div class="hero-image">
@@ -66,14 +80,13 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 						{
 							pubDate && (
 								<div class="date">
-									<FormattedDate date={pubDate} />
-									{
-										updatedDate && (
-											<div class="last-updated-on">
-												Last updated on <FormattedDate date={updatedDate} />
-											</div>
-										)
-									}
+									<FormattedDate date={pubDate} lang={lang} />
+									{updatedDate && (
+										<div class="last-updated-on">
+											{t(lang, 'lastUpdatedOn')}{' '}
+											<FormattedDate date={updatedDate} lang={lang} />
+										</div>
+									)}
 								</div>
 							)
 						}
@@ -84,6 +97,6 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				</div>
 			</article>
 		</main>
-		<Footer />
+		<Footer lang={lang} />
 	</body>
 </html>

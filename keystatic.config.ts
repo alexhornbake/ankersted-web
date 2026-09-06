@@ -25,6 +25,18 @@ const clientId = getEnv("KEYSTATIC_GITHUB_CLIENT_ID");
 const clientSecret = getEnv("KEYSTATIC_GITHUB_CLIENT_SECRET");
 const secret = getEnv("KEYSTATIC_SECRET");
 
+const pageSchema = {
+	title: fields.slug({ name: { label: "Title" } }),
+	description: fields.text({
+		label: "Description",
+		multiline: true,
+	}),
+	heroImage: fields.text({ label: "Hero image" }),
+	content: fields.markdoc({
+		label: "Content",
+	}),
+};
+
 // Base config - always valid
 const baseConfig: Parameters<typeof config>[0] = {
 	storage:
@@ -59,29 +71,34 @@ const baseConfig: Parameters<typeof config>[0] = {
 				}),
 			},
 		}),
-		pages: collection({
-			label: "Pages",
+		pages_da: collection({
+			label: "Pages (Danish)",
 			slugField: "title",
-			path: "src/content/pages/*",
+			path: "src/content/pages/da/*",
 			format: { contentField: "content" },
-			schema: {
-				title: fields.slug({ name: { label: "Title" } }),
-				description: fields.text({
-					label: "Description",
-					multiline: true,
-				}),
-				heroImage: fields.text({ label: "Hero image" }),
-				content: fields.markdoc({
-					label: "Content",
-				}),
-			},
+			schema: pageSchema,
+		}),
+		pages_en: collection({
+			label: "Pages (English)",
+			slugField: "title",
+			path: "src/content/pages/en/*",
+			format: { contentField: "content" },
+			schema: pageSchema,
 		}),
 	},
 
 	singletons: {
-		footer: singleton({
-			label: "Footer",
-			path: "src/content/footer/",
+		footer_da: singleton({
+			label: "Footer (Danish)",
+			path: "src/content/footer/da/",
+			format: { contentField: "content" },
+			schema: {
+				content: fields.markdoc({ label: "Content" }),
+			},
+		}),
+		footer_en: singleton({
+			label: "Footer (English)",
+			path: "src/content/footer/en/",
 			format: { contentField: "content" },
 			schema: {
 				content: fields.markdoc({ label: "Content" }),

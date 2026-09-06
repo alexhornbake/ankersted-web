@@ -1,0 +1,30 @@
+---
+import Layout from '../layouts/BlogPost.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+	const pages = await getCollection('pages');
+
+	return pages
+		.filter((page) => page.id.startsWith('da/') && page.id !== 'da')
+		.map((page) => {
+			const slug = page.id.slice('da/'.length);
+			return {
+				params: { slug },
+				props: { page },
+			};
+		});
+}
+
+const { page } = Astro.props;
+const { Content } = await render(page);
+---
+
+<Layout
+	title={page.data.title}
+	description={page.data.description}
+	heroImage={page.data.heroImage}
+	lang="da"
+>
+	<Content />
+</Layout>
